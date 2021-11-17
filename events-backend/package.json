@@ -20,7 +20,8 @@
     "knex-migrate": "^1.7.4",
     "pg": "^8.7.1",
     "uuid": "^8.3.2",
-    "uuid-v4": "^0.1.0"
+    "uuid-v4": "^0.1.0",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
