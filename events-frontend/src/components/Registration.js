@@ -1,30 +1,24 @@
-import React from 'react'
-// import LoginImg from "../ ../Login.svg";
+import React from 'react';
+import './style.scss';
 
-export class Register extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-  reander() {
-    return <div className="base-container">
+const Registration = () => {
+  return (
+    <div className="base-container">
       <div className="header">Register</div>
       <div className="content">
-        <div className="image">
-         
-        </div>
+        <div className="image"></div>
         <div className="form">
-          <div className= "form-group">
+          <div className="form-group">
             <label htmlFor="username">Username</label>
-            <input type="text" name="username" placeholder="username"/>
+            <input type="text" name="username" placeholder="username" />
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" placeholder="email"/>
+            <input type="email" name="email" placeholder="email" />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input type="password" name="password" placeholder="password"/>
+            <input type="password" name="password" placeholder="password" />
           </div>
         </div>
       </div>
@@ -34,5 +28,7 @@ export class Register extends React.Component {
         </button>
       </div>
     </div>
-  }
+  );
 }
+
+export default Registration;
