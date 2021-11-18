@@ -29,6 +29,10 @@ const checkRegistrationField = (data) => {
     errors.password = "Password must be greater than 6 characters";
   }
 
+  if (!validator.isIn(data.account_type, ["normal_user", "company"])) {
+    errors.account_type = "Please choose the correct account type"
+  }
+
   return {
     errors,
     isValid: ifEmpty(errors),
