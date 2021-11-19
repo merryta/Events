@@ -1,9 +1,9 @@
 import React from 'react';
-import './style.scss';
+import './style.css';
 
 const Registration = () => {
   return (
-    <div className="base-container">
+    <div className="Regcontainer">
       <div className="header">Register</div>
       <div className="content">
         <div className="image"></div>

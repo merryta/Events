@@ -1,4 +1,4 @@
-.base-container {
+/* .base-container {
     width: 100;
     display: flex;
     flex-direction: column;
@@ -19,7 +19,7 @@
             height: 100%;
         }
     }
-    .fome {
+    .form {
         margin-top: 2em;   
     display: flex;
     flex-direction: column;
@@ -54,4 +54,24 @@
     .footer {
         margin-top: 3em;
     }
+} */
+
+img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-image: url("https://media.istockphoto.com/photos/dogs-birthday-picture-id1316230317?b=1&k=20&m=1316230317&s=170667a&w=0&h=_hN_8KaQGu9EdugR2EE2Km61pdT4P9KWPIj56F3BlC0=");
+    position: relative;
+}
+.container {
+    top: 150px;
+    position: absolute;
+    text-align: center;
+    left: 20%;   
+}
+.Regcontainer {
+    top: 150px;
+    position: absolute;
+    text-align: center;
+    left: 60%;  
 }
