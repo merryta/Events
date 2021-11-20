@@ -33,4 +33,27 @@
 
 // export default Login;
 
+import React from 'react'
+
+const Login = () => {
+  return (
+    <div className="login-container">
+      <h2>Login</h2>
+      <form className="login-form">
+        <label>
+          Email:
+          <input />
+        </label>
+        <label>
+          Password:
+          <input />
+        </label>
+      </form>
+    </div>
+  )
+}
+
+export default Login
+
+
 
