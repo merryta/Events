@@ -5,11 +5,13 @@ import Registration from "./Registration";
 const Auth = () => {
     const [auth, setAuth] = React.useState(true);
 
-    const displayLoginPage = () => {
+    const displayLoginPage = (e) => {
+        e.preventDefault();
         setAuth(true);
     }
 
-    const displayRegisterPage = () => {
+    const displayRegisterPage = (e) => {
+        e.preventDefault();
         setAuth(false);
     }
     return (

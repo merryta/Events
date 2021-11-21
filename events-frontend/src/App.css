@@ -42,6 +42,14 @@ table {
 	border-spacing: 0;
 }
 
+input {
+  background-color: transparent;
+  border-bottom: 1px solid white;
+  outline: 0;
+  border-width: 0 0 1px;
+  height: 1.2rem;
+}
+
 .App {
   width: 100%;
   height: 100vh;
@@ -68,6 +76,7 @@ table {
     background-image: url("https://media.istockphoto.com/photos/dogs-birthday-picture-id1316230317?b=1&k=20&m=1316230317&s=170667a&w=0&h=_hN_8KaQGu9EdugR2EE2Km61pdT4P9KWPIj56F3BlC0=");
     position: relative;
     background-repeat: no-repeat;
+    color: white;
 }
 
 .auth-form {
@@ -114,6 +123,7 @@ table {
   width: 100%;
   height: 100%;
   align-items: center;
+  /* background-color: aqua; */
 }
 
 .login-container h2 {
@@ -131,6 +141,30 @@ table {
   width: 100%;
   flex: 1;
   align-items: center;
+}
+
+.login-form label:first-of-type {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.login-form label:last-of-type {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-btn {
+  outline: none;
+  cursor: pointer;
+  margin-top: 2rem;
+  padding: .5rem 2rem;
+  font-size: 16px;
+  letter-spacing: 1px;
+  border-radius: 1rem;
+  border: 1px solid white;
+  color: white;
+  background-color: transparent;
 }
 
 .register-container {
@@ -156,5 +190,52 @@ table {
   width: 100%;
   flex: 1;
   align-items: center;
+}
+
+.register-form label:first-of-type {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.register-form label:not(:first-child):not(:last-child) {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form label:last-of-type {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.register-account {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.register-account input:first-of-type {
+  margin-right: .3rem;
+}
+
+.register-account input:last-of-type {
+  margin-left: 1rem;
+  margin-right: .3rem;
+}
+
+.register-btn {
+  margin-top: 2rem;
+  outline: none;
+  cursor: pointer;
+  padding: .5rem 2rem;
+  font-size: 16px;
+  letter-spacing: 1px;
+  border-radius: 1rem;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
 }
 
