@@ -132,7 +132,8 @@ input {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  height: 5%;
+  height: 8%;
+  margin-bottom: 1rem;
 }
 
 .login-form {
@@ -181,7 +182,8 @@ input {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  height: 5%;
+  height: 8%;
+  margin-bottom: 1rem;
 }
 
 .register-form {
