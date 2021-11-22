@@ -3,7 +3,7 @@ import React from 'react'
 const Login = () => {
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>Sign In</h2>
       <form className="login-form">
         <label>
           Email:
@@ -19,7 +19,7 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;
 
 
 

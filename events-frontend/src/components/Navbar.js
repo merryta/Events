@@ -11,16 +11,16 @@ function Navbar() {
     const showButton = () => {
         if(window.innerWidth <= 960) {
             setButton(false);
-        }else
-        setButton(true);
+        } else {
+            setButton(true);
+        }
     }
     window.addEventListener('resize',showButton);
     return (
-        <>
             <nav className='navbar'>
                 <div className='navbar-container'>
                     <div className='menu-icon' onClick={handleClick}>
-                        <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
+                        {/* <i className={click ? 'fas fa-times' : 'fas fa-bars'} /> */}
                     </div>
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                         <li className='nav-item'>
@@ -36,12 +36,11 @@ function Navbar() {
                             <link to='/Account' className='nav-links-mobile' onClick={closeMobileMenu}>Account</link>
                         </li>
                     </ul>
-                        {Button && <Button>Account</Button>}
+                        {button && <Button>Account</Button>}
                 </div>
             </nav>
-        </>
     );
 }
 
 
-export default Navbar
+export default Navbar;

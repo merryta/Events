@@ -3,30 +3,27 @@ import './style.css';
 
  const Registration = () => {
    return (
-     <div className="Regcontainer">
-       <div className="header">Register</div>
-       <div className="content">
-         <div className="image"></div>
-         <div className="form">
-           <div className="form-group">
-             <label htmlFor="username">Username</label>
-             <input type="text" name="username" placeholder="username" />
-           </div>
-           <div className="form-group">
-             <label htmlFor="email">Email</label>
-             <input type="email" name="email" placeholder="email" />
-           </div>
-           <div className="form-group">
-             <label htmlFor="password">Password</label>
-             <input type="password" name="password" placeholder="password" />
-           </div>
+     <div className="register-container">
+       <h2>Sign Up</h2>
+       <form className="register-form">
+         <label>
+           Name:
+           <input type="text" />
+         </label>
+         <label>
+           Email:
+           <input type="email" />
+         </label>
+         <label>
+           Password:
+           <input type="password" />
+         </label>
+         <div className="register__account">
+           <input type="radio" />Normal User
+           <input type="radio" />Service Provider
          </div>
-       </div>
-       <div className="footer">
-         <button type="button" className="btn">
-           Register
-         </button>
-       </div>
+         <button className="register__btn">Register</button>
+       </form>
      </div>
    );
  }
