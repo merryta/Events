@@ -16,6 +16,16 @@ const createServiceSubCategory = (req, res) => {
     });
 };
 
+const getAllServiceSubCategories = async(req, res) => {
+  try {
+    const data = await knex("service_sub_categories");
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({message: "An error occurred while fetching the data"})
+  }
+}
+
 module.exports = {
   createServiceSubCategory,
+  getAllServiceSubCategories
 };
