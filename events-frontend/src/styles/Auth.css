@@ -145,7 +145,25 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
+}
+
+.register__account select {
+    cursor: pointer;
+    outline: none;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: white;
+    border-width: 0 0 1px;
+    border-color: white;
+    width: 100%;
+}
+
+.register__account select option {
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
 }
 
 .register__account input:first-of-type {

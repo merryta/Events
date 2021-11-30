@@ -1,3 +1,6 @@
 .main__container {
-  background-color: hotpink;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 100%;
 }

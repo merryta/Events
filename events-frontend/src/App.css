@@ -50,28 +50,12 @@ input {
 	outline: none;
 	border-width: 0 0 1px 0;
 	border-bottom: 1px solid white;
+	color: white;
 }
 
-.App {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+a {
+	text-decoration: none;
 }
 
-.App__header {
-  border-bottom: 1px solid white;
-}
 
-.App__body {
-  height: auto;
-}
-
-.App__footer {
-	display: flex;
-	flex-direction: column;
-  border-top: 1px solid white;
-}
 

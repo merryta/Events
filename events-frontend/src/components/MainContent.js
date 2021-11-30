@@ -1,10 +1,17 @@
 import React from 'react';
+import Introduction from '../pages/Introduction';
+import Workspace from '../pages/Workspace';
+import Service from '../pages/Service';
 import "../styles/MainContent.css";
+import Contact from '../pages/Contact';
 
 const MainContent = () => {
   return (
     <div className="main__container">
-      Main Content is working!!!
+      <Introduction />
+      <Workspace />
+      <Service />
+      <Contact />
     </div>
   )
 }

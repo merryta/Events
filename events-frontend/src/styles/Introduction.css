@@ -1,0 +1,23 @@
+.introduction__container {
+  position: relative;
+  width: 100%;
+  height: 40rem;
+  background-image: url("https://images.pexels.com/photos/5244008/pexels-photo-5244008.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  object-fit: fill;
+  object-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.introduction__container--details {
+  position: absolute;
+  top: 25%;
+  left: 12.5%;
+  width: 75%;
+  padding: .5rem;
+  /* height: 50%; */
+  background-color: rgba(0, 0, 0, .5);
+  font-size: 2.5rem;
+  font-weight: bold;
+}

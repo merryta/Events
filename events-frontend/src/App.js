@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Auth from "./components/Auth";
 import Home from "./pages/Home";
-// import Service from "./components/Service";
+import ServicePage from "./components/ServicePage";
+import Login from "./components/Login";
 // import Button from "./components/Button";
 // import CompanyRegForm from './components/CompanyRegForm';
 // import Navbar from "./components/Navbar";
@@ -15,6 +16,8 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/service" element={<ServicePage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -35,11 +35,11 @@ const createAccount = (req, res) => {
           token: token,
         })
         .then((results) => {
-          res.json(results[0]);
+          res.json({message: "User successfully registered!"});
         })
         .catch((error) => {
           errors.account = "Account is already registered";
-          res.status(400).json(error);
+          res.status(400).json({message: "An error occurred"});
         });
     });
   });
@@ -78,6 +78,21 @@ const login = (req, res) => {
   }
 };
 
+// const userVerification = (req, res, next) => {
+//   const token = req.headers.authorization.split(" ")[1];
+//   jwt.verify(token, secretKey, (error, decodedToken) => {
+//     if(error) {
+//       res.status(401).json({
+//         message: "Unauthorized Access!"
+//       })
+//     } else {
+//       res.status(200).json({
+//         id: decodedToken.id,
+//       })
+//     }
+//   })
+// }
+
 const getAllUsers = async (req, res) => {
   try {
     const data = await knex("accounts");
@@ -91,4 +106,5 @@ module.exports = {
   createAccount,
   login,
   getAllUsers,
+  // userVerification
 };
