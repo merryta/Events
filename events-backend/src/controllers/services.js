@@ -41,7 +41,45 @@ const getAllServices = async (req, res) => {
   }
 };
 
+const getSingleService = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const data = await knex("services").where({ id: id });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: `Service with an id of ${id} is not found` });
+  }
+};
+
+const getServicesBySubCategories = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex("services")
+      .join("service_sub_categories", "service_sub_categories.id", "services.service_sub_categories_id")
+      .select(
+        "services.id",
+        "services.name",
+        "services.description",
+        "services.photo",
+        "services.delivery_point",
+        "services.consumer_count",
+        "services.service_readiness",
+        "services.support_team",
+        "services.support_language",
+        "services.service_duration",
+        "services.price"
+      )
+      .where({ service_sub_categories_id: id });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: `Sub category with an id of ${id} is not found` });
+  }
+};
+
 module.exports = {
   createNewService,
   getAllServices,
+  getSingleService,
+  getServicesBySubCategories,
 };

@@ -23,9 +23,20 @@ const getAllServiceSubCategories = async(req, res) => {
   } catch (error) {
     res.status(500).json({message: "An error occurred while fetching the data"})
   }
+};
+
+const getSingleServiceSubCategory = async(req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex("service_sub_categories").where({id : id});
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: `Sub category with an id of ${id} is not found`});
+  }
 }
 
 module.exports = {
   createServiceSubCategory,
-  getAllServiceSubCategories
+  getAllServiceSubCategories,
+  getSingleServiceSubCategory
 };

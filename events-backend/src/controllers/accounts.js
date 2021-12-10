@@ -52,7 +52,7 @@ const login = (req, res) => {
     return res.status(400).json(errors);
   } else {
     knex
-      .select("id", "name", "email", "password")
+      .select("id", "name", "email", "password", "token")
       .where("email", "=", req.body.email)
       .from("accounts")
       .then((data) => {
@@ -65,7 +65,9 @@ const login = (req, res) => {
               account_type: data[0].account_type,
             };
             jwt.sign(payload, secretKey, { expiresIn: 3600 }, (err, token) => {
-              res.status(200).json("Bearer " + token);
+              res.status(200).json(
+                data[0]
+              );
             });
           } else {
             res.status(400).json("Bad request");

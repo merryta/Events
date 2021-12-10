@@ -6,6 +6,9 @@ import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from "../sagas";
 import { registerReducer } from "./reducers/RegisterReducer";
+import { loginReducer } from "./reducers/LoginReducer";
+import { getAllSubCategoriesReducer } from "./reducers/SubCategoriesReducer";
+import { getServicesReducer } from "./reducers/ServicesReducer";
 
 export default function configureStore() {
   const sagaMiddleware = createSagaMiddleware();
@@ -13,6 +16,9 @@ export default function configureStore() {
   const store = createStore(
     combineReducers({
       registration: registerReducer,
+      login: loginReducer,
+      subCategories: getAllSubCategoriesReducer,
+      services: getServicesReducer
     }),
     composeWithDevTools(applyMiddleware(sagaMiddleware, thunk, logger))
   );

@@ -10,7 +10,7 @@ const Service = () => {
     <div className="service__container">
       <div className="service__container--header">
         <h2>Popular Services</h2>
-        <Link to="/service">
+        <Link to="/service-dashboard">
           <button>Show all..</button>
         </Link>
       </div>

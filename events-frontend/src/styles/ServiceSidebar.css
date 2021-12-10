@@ -1,0 +1,46 @@
+.service--sidebar__container {
+  display: flex;
+  flex-direction: column;
+  width: 18%;
+  background-color: rgb(37, 37, 41);
+}
+
+.service--sidebar__all {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1rem;
+  height: 2.5rem;
+  color: white;
+}
+
+.service--sidebar__link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  color: white;
+}
+
+.service--sidebar__link span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  width: 20%;
+  font-size: 1.4rem;
+}
+
+.service--sidebar__link p {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 100%;
+  align-items: center;
+  font-size: 1.4rem;
+  
+}
+
+
+

@@ -1,65 +1,101 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userRegister } from "../redux/action/Register";
-import { registerUserApi } from "../api/user";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
+import { useFormik } from 'formik';
+import * as Yup from "yup";
 
 const Registration = () => {
+  // const [success, setSuccess] = React.useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.registration);
-  // console.log(state);
-  const [user, setUser] = React.useState({
-    name: "",
-    email: "",
-    password: "",
-    account_type: "",
-  });
-
-  const formSubmit = (e) => {
-    e.preventDefault();
-    dispatch(userRegister(user));
-    setUser({
+  const formik = useFormik({
+    initialValues: {
       name: "",
       email: "",
       password: "",
       account_type: "",
-    });
-    navigate.push('/login');
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prev) => ({
-      ...prev, [name]: value
-    }))
-  };
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("* Name field is required"),
+      email: Yup.string().email("Invalid email address").required("* Email field is required"),
+      password: Yup.string()
+        .required("* Password is required")
+        .min(6, "Password is too short - minimum should be 6 characters"),
+      account_type: Yup.string().required("* Account type is required"),
+    }),
+    onSubmit: (values) => {
+      try {
+        const { name, email, password, account_type } = values;
+        dispatch(userRegister({ name, email, password, account_type }));
+        navigate("/home");
+      } catch (error) {
+        formik.resetForm();
+      }
+    },
+  });
 
   return (
     <div className="register-container">
       <h2>Sign Up</h2>
-      <form className="register-form" onSubmit={formSubmit}>
-        <label>
-          Name:
-          <input type="text" name="name" value={user.name} onChange={handleChange} />
-        </label>
-        <label>
-          Email:
-          <input type="email" name="email" value={user.email} onChange={handleChange} />
-        </label>
-        <label>
-          Password:
-          <input type="password" name="password" value={user.password} onChange={handleChange} />
-        </label>
+      <form className="register-form" onSubmit={formik.handleSubmit}>
+        <div className="register--form__name">
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              autoComplete="off"
+            />
+          </label>
+          <span>
+            {formik.errors.name}
+          </span>
+        </div>
+        <div>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              autoComplete="off"
+            />
+          </label>
+          <span>
+            {formik.errors.email}
+          </span>
+        </div>
+        <div>
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              autoComplete="off"
+            />
+          </label>
+          <span>
+            {formik.errors.password}
+          </span>
+        </div>
         <div className="register__account">
-          <select name="account_type" id="account_type" onChange={handleChange}>
-            <option>Select Role</option>
+          <select name="account_type" id="account_type" onChange={formik.handleChange} placeholder="Select role">
             <option value="normal_user">Normal User</option>
             <option value="company">Service Provider</option>
           </select>
+          <span>
+            {formik.errors.account_type}
+          </span>
         </div>
-        <button className="register__btn">Register</button>
+        <button type="submit" disabled={!formik.isValid} className="register__btn">
+          Register
+        </button>
       </form>
     </div>
   );
