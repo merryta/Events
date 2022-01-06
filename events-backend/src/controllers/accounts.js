@@ -14,32 +14,37 @@ const createAccount = (req, res) => {
     return res.status(400).json(errors);
   }
 
-  let token;
-  crypto.randomBytes(48, (err, buf) => {
-    if (err) throw err;
-    token = buf.toString("base64").replace(/\//g, "").replace(/\+/g, "-");
-    return token;
-  });
+  // let token;
+  // let payload = {
+  //   name: req.body.name,
+  //   email: req.body.email,
+  //   account_type: req.body.account_type
+  // };
+  // console.log(payload);
+  // token = jwt.sign(payload, secretKey, {expiresIn: '24h'});
+  // let data =
 
   bcrypt.genSalt(12, (err, salt) => {
     if (err) throw err;
-    bcrypt.hash(req.body.password, salt, (err, hash) => {
+    bcrypt.hash(req.body.password, salt, (err, hashedPassword) => {
       if (err) throw err;
       knex("accounts")
-        .returning(["id", "name", "email", "account_type", "token"])
         .insert({
           name: req.body.name,
           email: req.body.email,
-          password: hash,
+          password: hashedPassword,
           account_type: req.body.account_type,
-          token: token,
         })
-        .then((results) => {
-          res.json({message: "User successfully registered!"});
+        .returning(["id", "name", "email", "account_type"])
+        .then((user) => {
+          const userToken = jwt.sign({ id: req.body.id, name: req.body.name, email: req.body.email, account_type: req.body.account_type }, secretKey, {
+            expiresIn: "24h",
+          });
+          res.json({ message: "User successfully registered!", status: true, data: { user, userToken } });
         })
         .catch((error) => {
           errors.account = "Account is already registered";
-          res.status(400).json({message: "An error occurred"});
+          res.status(400).json({ status: false, message: error.detail });
         });
     });
   });
@@ -52,7 +57,7 @@ const login = (req, res) => {
     return res.status(400).json(errors);
   } else {
     knex
-      .select("id", "name", "email", "password", "token")
+      .select("id", "name", "email", "password", "account_type")
       .where("email", "=", req.body.email)
       .from("accounts")
       .then((data) => {
@@ -64,10 +69,9 @@ const login = (req, res) => {
               email: data[0].email,
               account_type: data[0].account_type,
             };
-            jwt.sign(payload, secretKey, { expiresIn: 3600 }, (err, token) => {
-              res.status(200).json(
-                data[0]
-              );
+            console.log(payload);
+            jwt.sign(payload, secretKey, { expiresIn: "24h" }, (err, token) => {
+              return res.status(200).send({ data: { user: payload, token } });
             });
           } else {
             res.status(400).json("Bad request");
@@ -79,21 +83,6 @@ const login = (req, res) => {
       });
   }
 };
-
-// const userVerification = (req, res, next) => {
-//   const token = req.headers.authorization.split(" ")[1];
-//   jwt.verify(token, secretKey, (error, decodedToken) => {
-//     if(error) {
-//       res.status(401).json({
-//         message: "Unauthorized Access!"
-//       })
-//     } else {
-//       res.status(200).json({
-//         id: decodedToken.id,
-//       })
-//     }
-//   })
-// }
 
 const getAllUsers = async (req, res) => {
   try {

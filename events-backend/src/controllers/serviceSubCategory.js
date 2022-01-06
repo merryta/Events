@@ -16,27 +16,42 @@ const createServiceSubCategory = (req, res) => {
     });
 };
 
-const getAllServiceSubCategories = async(req, res) => {
+const getAllServiceSubCategories = async (req, res) => {
   try {
     const data = await knex("service_sub_categories");
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({message: "An error occurred while fetching the data"})
+    res.status(500).json({ message: "An error occurred while fetching the data" });
   }
 };
 
-const getSingleServiceSubCategory = async(req, res) => {
+const getSingleServiceSubCategory = async (req, res) => {
   const { id } = req.params;
   try {
-    const data = await knex("service_sub_categories").where({id : id});
+    const data = await knex("service_sub_categories").where({ id: id });
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ message: `Sub category with an id of ${id} is not found`});
+    res.status(500).json({ message: `Sub category with an id of ${id} is not found` });
   }
-}
+};
+
+const deleteServiceSubCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex("service_sub_categories").where({ id: id }).del();
+    res.status(200).json({
+      message: `Successfully deleted sub category with an id of ${id}`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to find a sub category with an id of ${id}`,
+    });
+  }
+};
 
 module.exports = {
   createServiceSubCategory,
   getAllServiceSubCategories,
-  getSingleServiceSubCategory
+  getSingleServiceSubCategory,
+  deleteServiceSubCategory
 };

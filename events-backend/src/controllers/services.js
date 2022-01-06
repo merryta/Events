@@ -22,7 +22,7 @@ const createNewService = async (req, res) => {
         account_id: req.body.account_id,
         service_sub_categories_id: req.body.service_sub_categories_id,
       });
-      res.status(200).json({ service: service });
+      res.status(200).json(service);
     } catch (error) {
       errors.name = "Name must be unique";
       res.status(500).json({
@@ -43,7 +43,6 @@ const getAllServices = async (req, res) => {
 
 const getSingleService = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const data = await knex("services").where({ id: id });
     res.status(200).json(data);
@@ -77,9 +76,24 @@ const getServicesBySubCategories = async (req, res) => {
   }
 };
 
+const deleteService = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex("services").where({ id: id }).del();
+    res.status(200).json({
+      message: `Successfully delete service with an id of ${id}`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Service with an id of ${id} is not found`,
+    });
+  }
+};
+
 module.exports = {
   createNewService,
   getAllServices,
   getSingleService,
   getServicesBySubCategories,
+  deleteService,
 };
