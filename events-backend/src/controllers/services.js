@@ -76,6 +76,31 @@ const getServicesBySubCategories = async (req, res) => {
   }
 };
 
+const getServicesByAccountId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex("services")
+      .join("accounts", "accounts.id", "services.account_id")
+      .select(
+        "services.id",
+        "services.name",
+        "services.description",
+        "services.photo",
+        "services.delivery_point",
+        "services.consumer_count",
+        "services.service_readiness",
+        "services.support_team",
+        "services.support_language",
+        "services.service_duration",
+        "services.price"
+      )
+      .where({ account_id: id });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: `Account with an id of ${id} is not found` });
+  }
+}
+
 const deleteService = async (req, res) => {
   const { id } = req.params;
   try {
@@ -96,4 +121,5 @@ module.exports = {
   getSingleService,
   getServicesBySubCategories,
   deleteService,
+  getServicesByAccountId
 };
