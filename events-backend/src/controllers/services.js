@@ -32,14 +32,14 @@ const createNewService = async (req, res) => {
   }
 };
 
-const getAllServices = async (req, res) => {
+  const getAllServices = async (req, res) => {
   try {
     const data = await knex("services");
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ message: "Unable to retrieve the data" });
+    res.status(500).json({ message: "An error occurred while fetching the data" });
   }
-};
+}
 
 const getSingleService = async (req, res) => {
   const { id } = req.params;

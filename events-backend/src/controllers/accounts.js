@@ -1,6 +1,5 @@
 const knex = require("../../db/knex");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
 const checkRegistrationField = require("../validation/register");
@@ -13,16 +12,6 @@ const createAccount = (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-
-  // let token;
-  // let payload = {
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   account_type: req.body.account_type
-  // };
-  // console.log(payload);
-  // token = jwt.sign(payload, secretKey, {expiresIn: '24h'});
-  // let data =
 
   bcrypt.genSalt(12, (err, salt) => {
     if (err) throw err;
@@ -96,6 +85,5 @@ const getAllUsers = async (req, res) => {
 module.exports = {
   createAccount,
   login,
-  getAllUsers,
-  // userVerification
+  getAllUsers
 };

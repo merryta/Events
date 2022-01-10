@@ -30,19 +30,37 @@ const knex = require('../../db/knex');
 //   }
 // }
 
-const userVerification = (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
-  jwt.verify(token, secretKey, (error, decodedToken) => {
-    if(error) {
-      res.status(401).json({
-        message: "Unauthorized Access!"
-      })
-    } 
-    req.user = decodedToken;
-    console.log(req.user);
-    return next();
-  })
-}
+// const userVerification = (req, res, next) => {
+//   const token = req.headers.authorization.split(" ")[1];
+//   jwt.verify(token, secretKey, (error, decodedToken) => {
+//     if(error) {
+//       res.status(401).json({
+//         message: "Unauthorized Access!"
+//       })
+//     }
+//     req.user = decodedToken;
+//     console.log('req.user', decodedToken.id);
+//     return next();
+//   })
+// }
 
-// module.exports = authMiddleWare;
+const userVerification = async(req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    jwt.verify(token, secretKey, (error, decodedToken) => {
+      if(error) {
+        res.status(401).json({
+          message: "Unauthorized Access!"
+        })
+      }
+      req.user = decodedToken.id;
+      console.log('req.user', decodedToken.id);
+
+      return next();
+    })
+  } catch (error) {
+    console.log(error)
+  }
+};
+
 module.exports = userVerification;
