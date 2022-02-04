@@ -7,15 +7,19 @@ const serviceRoutes = require("./routes/services");
 const accountRoutes = require("./routes/accounts");
 const serviceCategoryRoutes = require('./routes/serviceCategory');
 const serviceSubCategoryRoutes = require('./routes/serviceSubCategory');
+const profileRoutes = require('./routes/profile');
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
 
 // routes
 app.use(serviceRoutes);
 app.use(accountRoutes);
 app.use(serviceCategoryRoutes);
 app.use(serviceSubCategoryRoutes);
+app.use(profileRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is working!");

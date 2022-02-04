@@ -41,6 +41,10 @@ const checkServiceRegistrationField = (data) => {
     errors.consumer_count = "Consumer count is required";
   }
 
+  if (!validator.isNumeric(data.consumer_count)) {
+    errors.consumer_count = "Service duration must be a number";
+  }
+
   if(validator.isEmpty(data.service_readiness)) {
     errors.service_readiness  = "Service readiness field must have a value"
   }
@@ -69,8 +73,16 @@ const checkServiceRegistrationField = (data) => {
     errors.service_duration = "Service duration is required";
   }
 
+  if(!validator.isIn(data.service_duration, ['24hrs', '48hrs', '72hrs', '96hrs', '120hrs'])) {
+    errors.service_duration = "Please select the correct service duration";
+  }
+
   if(validator.isEmpty(data.price)) {
     errors.price = "Price must be specified";
+  }
+
+  if(!validator.isNumeric(data.price)) {
+    errors.price = "Price must be a number";
   }
 
   if(validator.isEmpty(data.account_id)) {

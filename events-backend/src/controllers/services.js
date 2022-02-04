@@ -1,38 +1,87 @@
 const knex = require("../../db/knex");
 const checkServiceRegistrationField = require("../validation/service");
+const { cloudinary } = require("../util/cloudinaryConfig");
 
 const createNewService = async (req, res) => {
   const { errors, isValid } = checkServiceRegistrationField(req.body);
-
-  if (!isValid) {
+  if(!isValid && !req.file) {
     res.status(400).json(errors);
   } else {
-    try {
-      const service = await knex("services").insert({
-        name: req.body.name,
-        description: req.body.description,
-        photo: req.body.photo,
-        delivery_point: req.body.delivery_point,
-        consumer_count: req.body.consumer_count,
-        service_readiness: req.body.service_readiness,
-        support_team: req.body.support_team,
-        support_language: req.body.support_language,
-        service_duration: req.body.service_duration,
-        price: req.body.price,
-        account_id: req.body.account_id,
-        service_sub_categories_id: req.body.service_sub_categories_id,
-      });
-      res.status(200).json(service);
-    } catch (error) {
+    knex("services").insert({
+      name: req.body.name,
+      description: req.body.description,
+      photo: req.file.path,
+      delivery_point: req.body.delivery_point,
+      consumer_count: req.body.consumer_count,
+      service_readiness: req.body.service_readiness,
+      support_team: req.body.support_team,
+      support_language: req.body.support_language,
+      service_duration: req.body.service_duration,
+      price: req.body.price,
+      account_id: req.body.account_id,
+      service_sub_categories_id: req.body.service_sub_categories_id,
+    })
+    .returning("*")
+    .then((data) => {
+      console.log(data);
+      res.status(200).json({
+        message: "Service created successfully",
+        status: true,
+        service: data,
+      })
+    })
+    .catch((error) => {
+      console.log(error);
       errors.name = "Name must be unique";
       res.status(500).json({
         message: "Unable to create a new service",
       });
-    }
+    });
   }
 };
 
-  const getAllServices = async (req, res) => {
+// const uploadService = async (req, res) => {
+//   try {
+//     const { errors, isValid } = checkServiceRegistrationField(req.body);
+//     if(!isValid) {
+//       res.status(400).json(errors);
+//     };
+//     const fileStr = req.body.photo;
+//     const uploadResult = await cloudinary.uploader.upload(fileStr, {
+//       upload_preset: "service_photo",
+//     });
+//     knex("services").insert({
+//       name: req.body.name,
+//       description: req.body.description,
+//       photo: req.body.photo,
+//       delivery_point: req.body.delivery_point,
+//       consumer_count: req.body.consumer_count,
+//       service_readiness: req.body.service_readiness,
+//       support_team: req.body.support_team,
+//       support_language: req.body.support_language,
+//       service_duration: req.body.service_duration,
+//       price: req.body.price,
+//       account_id: req.body.account_id,
+//       service_sub_categories_id: req.body.service_sub_categories_id,
+//     })
+//     .returning("*")
+//   .then((data) => {
+//     res.status(200).json({
+//       message: "Service created successfully",
+//       status: true,
+//       service: data,
+//     });
+//   })
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       message: "Unable to create a new service",
+//     });
+//   }
+// }
+
+
+const getAllServices = async (req, res) => {
   try {
     const data = await knex("services");
     res.status(200).json(data);
@@ -117,6 +166,7 @@ const deleteService = async (req, res) => {
 
 module.exports = {
   createNewService,
+  // uploadService,
   getAllServices,
   getSingleService,
   getServicesBySubCategories,
