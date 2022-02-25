@@ -70,6 +70,7 @@ const getProfileByAccountId = async (req, res) => {
         "accounts.email",
       )
       .where({ account_id: id });
+      console.log(data);
       if(data.length === 0) {
         res.status(404).json({
           msg: `Profile with an id of ${id} is not found`,
@@ -91,40 +92,66 @@ const getProfileByAccountId = async (req, res) => {
   }
 };
 
-// const updateProfile = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const data = await knex("profile").where({ id: id }).update({
-//       phone: req.body.phone,
-//       location: req.body.location,
-//       website: req.body.website,
-//       facebook: req.body.facebook,
-//       twitter: req.body.twitter,
-//       instagram: req.body.instagram,
-//       linkedIn: req.body.linkedIn,
-//       about: req.body.about,
-//       photo: req.file.path,
-//       account_id: req.body.account_id,
-//     })
-//     .returning("*")
-//     .then((data) => {
-//       res.status(200).json({
-//         msg: `Profile with an id of ${id} is updated successfully`,
-//         status: true,
-//         profile: data,
-//       });
-//     })
-//     .catch(() => {
-//       res.json("Something went wrong.")
-//     })
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-//       msg: `An error occurred while updating the profile with id ${id}`,
-//       status: false,
-//     });
-//   }
-// }
+const getProfileServices = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await knex("profile")
+      .join("services", "services.account_id", "profile.account_id")
+      .select(
+        "profile.phone",
+      )
+      .where({ account_id: id });
+      if(data) {
+        res.status(200).json({
+          msg: `Services of the profile with an id of ${id} is fetched successfully`,
+          status: true,
+          profile: data,
+        });
+      } else {
+        res.status(404).json({
+          msg: `Services of the profile with an id of ${id} is not found`,
+          status: false,
+        });
+      }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: `An error occurred while fetching the services of the profile with id ${id}`,
+      status: false,
+      error: error
+    });
+  }
+};
+
+const getData = async (req, res) => {
+  try {
+    const data = await knex.select(knex.raw(
+      `profile.phone, services.account_id, profile.account_id, services.name from profile join services on services.account_id = profile.account_id;`
+    ));
+    console.log('data', data);
+
+    if (data) {
+      res.status(200).json({
+        msg: `Data of the profile  fetched successfully`,
+        status: true,
+        data: data,
+      });
+    } else {
+      res.status(404).json({
+        msg: `Data of the profile is not found`,
+        status: false,
+      });
+    }
+  } catch (error) {
+    
+    res.status(500).json({
+      msg: `An error occurred while fetching the data of the profile`,
+      status: false,
+      error: error
+    });
+  }
+  
+}
 
 const updateProfile = async (req, res) => {
   const { id } = req.params;
@@ -199,7 +226,9 @@ const deleteProfile = async (req, res) => {
 module.exports = {
   createProfile,
   getAllProfiles,
+  getData,
   getProfileByAccountId,
+  getProfileServices,
   updateProfile,
   updateProfilePhoto,
   deleteProfile,

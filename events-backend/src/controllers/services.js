@@ -130,8 +130,8 @@ const getServicesByAccountId = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("services")
-      .leftJoin("accounts", "accounts.id", "services.account_id")
-      // .leftJoin("profile", "profile.account_id", "services.account_id")
+      .join("accounts", "accounts.id", "services.account_id")
+      // .join("profile", "profile.account_id", "services.account_id")
       .select(
         "services.id",
         "services.name",
@@ -145,13 +145,17 @@ const getServicesByAccountId = async (req, res) => {
         "services.service_duration",
         "services.price",
         "services.account_id",
+        "profile.email",
       )
       .where({ account_id: id });
+      console.log('data', data);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: `Account with an id of ${id} is not found` });
   }
 }
+
+
 
 const deleteService = async (req, res) => {
   const { id } = req.params;
