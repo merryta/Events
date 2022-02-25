@@ -91,37 +91,90 @@ const getProfileByAccountId = async (req, res) => {
   }
 };
 
+// const updateProfile = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const data = await knex("profile").where({ id: id }).update({
+//       phone: req.body.phone,
+//       location: req.body.location,
+//       website: req.body.website,
+//       facebook: req.body.facebook,
+//       twitter: req.body.twitter,
+//       instagram: req.body.instagram,
+//       linkedIn: req.body.linkedIn,
+//       about: req.body.about,
+//       photo: req.file.path,
+//       account_id: req.body.account_id,
+//     })
+//     .returning("*")
+//     .then((data) => {
+//       res.status(200).json({
+//         msg: `Profile with an id of ${id} is updated successfully`,
+//         status: true,
+//         profile: data,
+//       });
+//     })
+//     .catch(() => {
+//       res.json("Something went wrong.")
+//     })
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       msg: `An error occurred while updating the profile with id ${id}`,
+//       status: false,
+//     });
+//   }
+// }
+
 const updateProfile = async (req, res) => {
   const { id } = req.params;
+  const data = req.body;
   try {
-    const data = await knex("profile").where({ id: id }).update({
-      phone: req.body.phone,
-      location: req.body.location,
-      website: req.body.website,
-      facebook: req.body.facebook,
-      twitter: req.body.twitter,
-      instagram: req.body.instagram,
-      linkedIn: req.body.linkedIn,
-      about: req.body.about,
-      photo: req.file.path,
-      account_id: req.body.account_id,
-    })
-    .returning("*")
-    .then((data) => {
+    const profile = await knex("profile").where({id}).update(data);
+    if(profile) {
       res.status(200).json({
         msg: `Profile with an id of ${id} is updated successfully`,
         status: true,
         profile: data,
       });
-    })
-    .catch(() => {
-      res.json("Something went wrong.")
-    })
-  } catch (error) {
+    } else {
+      res.status(404).json({
+        msg: `Profile with an id of ${id} is not found`,
+        status: false,
+      });
+    }
+  } catch(error) {
     console.log(error);
     res.status(500).json({
       msg: `An error occurred while updating the profile with id ${id}`,
       status: false,
+      error: error
+    });
+  }
+};
+
+const updateProfilePhoto = async (req, res) => {
+  const { id } = req.params;
+  const photo = req.file.path;
+  try {
+    const updatePhoto = await knex("profile").where({ id: id }).update(photo);
+    if(updatePhoto) {
+      res.status(200).json({
+        msg: `Profile with an id of ${id} is updated successfully`,
+        status: true,
+        profile: photo,
+      });
+    } else {
+      res.status(404).json({
+        msg: `Profile with an id of ${id} is not found`,
+        status: false,
+      });
+    }
+  } catch(error) {
+    res.status(500).json({
+      msg: `An error occurred while updating the profile with id ${id}`,
+      status: false,
+      error: error
     });
   }
 }
@@ -148,5 +201,6 @@ module.exports = {
   getAllProfiles,
   getProfileByAccountId,
   updateProfile,
+  updateProfilePhoto,
   deleteProfile,
 }
