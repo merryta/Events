@@ -157,7 +157,7 @@ const updateProfilePhoto = async (req, res) => {
   const { id } = req.params;
   const photo = req.file.path;
   try {
-    const updatePhoto = await knex("profile").where({ id: id }).update(photo);
+    const updatePhoto = await knex("profile").where({ id }).update({photo: photo});
     if(updatePhoto) {
       res.status(200).json({
         msg: `Profile with an id of ${id} is updated successfully`,
