@@ -46,7 +46,8 @@ const getAllProfiles = async (req, res) => {
       error: err
     });
   }
-}
+};
+
 
 const getProfileByAccountId = async (req, res) => {
   const { id } = req.params;
@@ -69,10 +70,17 @@ const getProfileByAccountId = async (req, res) => {
         "accounts.email",
       )
       .where({ account_id: id });
+      if(data.length === 0) {
+        res.status(404).json({
+          msg: `Profile with an id of ${id} is not found`,
+          status: false,
+          profile: [],
+        });
+      };
       res.status(200).json({
         msg: "Profile fetched successfully",
         status: true,
-        profile: data,
+        profile: data[0],
       });
   } catch (error) {
     console.log(error);
@@ -122,7 +130,7 @@ const deleteProfile = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("profile").where({ id: id }).del();
-    res.status(200).json({
+    res.status(204).json({
       msg: `Profile with an id of ${id} is deleted successfully`,
       status: true,
     });

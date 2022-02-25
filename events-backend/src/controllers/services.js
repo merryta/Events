@@ -1,6 +1,5 @@
 const knex = require("../../db/knex");
 const checkServiceRegistrationField = require("../validation/service");
-const { cloudinary } = require("../util/cloudinaryConfig");
 
 const createNewService = async (req, res) => {
   const { errors, isValid } = checkServiceRegistrationField(req.body);
@@ -125,11 +124,14 @@ const getServicesBySubCategories = async (req, res) => {
   }
 };
 
+
+
 const getServicesByAccountId = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("services")
-      .join("accounts", "accounts.id", "services.account_id")
+      .leftJoin("accounts", "accounts.id", "services.account_id")
+      // .leftJoin("profile", "profile.account_id", "services.account_id")
       .select(
         "services.id",
         "services.name",
@@ -141,7 +143,8 @@ const getServicesByAccountId = async (req, res) => {
         "services.support_team",
         "services.support_language",
         "services.service_duration",
-        "services.price"
+        "services.price",
+        "services.account_id",
       )
       .where({ account_id: id });
     res.status(200).json(data);
@@ -154,8 +157,9 @@ const deleteService = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("services").where({ id: id }).del();
-    res.status(200).json({
+    res.status(204).json({
       message: `Successfully delete service with an id of ${id}`,
+      status: true,
     });
   } catch (error) {
     res.status(500).json({
