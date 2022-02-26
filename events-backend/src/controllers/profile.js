@@ -92,66 +92,40 @@ const getProfileByAccountId = async (req, res) => {
   }
 };
 
-const getProfileServices = async (req, res) => {
-  const { id } = req.params;
+const serviceProfile = async (req, res) => {
   try {
     const data = await knex("profile")
       .join("services", "services.account_id", "profile.account_id")
+      .join("accounts", "accounts.id", "profile.account_id")
       .select(
         "profile.phone",
-      )
-      .where({ account_id: id });
-      if(data) {
-        res.status(200).json({
-          msg: `Services of the profile with an id of ${id} is fetched successfully`,
-          status: true,
-          profile: data,
-        });
-      } else {
-        res.status(404).json({
-          msg: `Services of the profile with an id of ${id} is not found`,
-          status: false,
-        });
-      }
+        "services.account_id",
+        "services.name",
+        "services.description",
+        "profile.account_id as profile_id",
+        "accounts.name as account_name",
+        "accounts.email as account_email",
+      );
+    if(data) {
+      res.status(200).json({
+        msg: `Profile of the services fetched successfully`,
+        status: true,
+        services: data,
+      });
+    } else {
+      res.status(404).json({
+        msg: `Profile of the services is not found`,
+        status: false,
+      });
+    }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
-      msg: `An error occurred while fetching the services of the profile with id ${id}`,
+      msg: `An error occurred while fetching the profile of the services`,
       status: false,
       error: error
     });
   }
 };
-
-const getData = async (req, res) => {
-  try {
-    const data = await knex.select(knex.raw(
-      `profile.phone, services.account_id, profile.account_id, services.name from profile join services on services.account_id = profile.account_id;`
-    ));
-    console.log('data', data);
-
-    if (data) {
-      res.status(200).json({
-        msg: `Data of the profile  fetched successfully`,
-        status: true,
-        data: data,
-      });
-    } else {
-      res.status(404).json({
-        msg: `Data of the profile is not found`,
-        status: false,
-      });
-    }
-  } catch (error) {
-    
-    res.status(500).json({
-      msg: `An error occurred while fetching the data of the profile`,
-      status: false,
-      error: error
-    });
-  }
-  
-}
 
 const updateProfile = async (req, res) => {
   const { id } = req.params;
@@ -225,10 +199,9 @@ const deleteProfile = async (req, res) => {
 
 module.exports = {
   createProfile,
+  serviceProfile,
   getAllProfiles,
-  getData,
   getProfileByAccountId,
-  getProfileServices,
   updateProfile,
   updateProfilePhoto,
   deleteProfile,
