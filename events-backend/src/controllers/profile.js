@@ -54,6 +54,7 @@ const getProfileByAccountId = async (req, res) => {
   try {
     const data = await knex("profile")
       .join("accounts", "accounts.id", "profile.account_id")
+      .join("services", "services.account_id", "profile.account_id")
       .select(
         "profile.id",
         "profile.phone",
@@ -68,8 +69,12 @@ const getProfileByAccountId = async (req, res) => {
         "profile.account_id",
         "accounts.name",
         "accounts.email",
+        "services.name as service_name",
+        "services.id as service_id",
+        "services.name as service_name",
+
       )
-      .where({ account_id: id });
+      .where({ "profile.account_id" : id });
       console.log(data);
       if(data.length === 0) {
         res.status(404).json({
