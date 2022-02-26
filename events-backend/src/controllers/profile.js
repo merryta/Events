@@ -97,7 +97,8 @@ const getProfileByAccountId = async (req, res) => {
   }
 };
 
-const serviceProfile = async (req, res) => {
+const getProfileByServiceId = async (req, res) => {
+  const { id } = req.params;
   try {
     const data = await knex("profile")
       .join("services", "services.account_id", "profile.account_id")
@@ -106,26 +107,27 @@ const serviceProfile = async (req, res) => {
         "profile.phone",
         "services.account_id",
         "services.name",
-        "services.description",
-        "profile.account_id as profile_id",
         "accounts.name as account_name",
         "accounts.email as account_email",
-      );
-    if(data) {
-      res.status(200).json({
-        msg: `Profile of the services fetched successfully`,
-        status: true,
-        services: data,
+      )
+      .where({ "services.id" : id })
+      .first()
+    if(data.length === 0) {
+      res.status(404).json({
+        msg: `Profile of a service with an id of ${id} is not found`,
+        status: false,
+        serviceProfile: [],
       });
     } else {
-      res.status(404).json({
-        msg: `Profile of the services is not found`,
-        status: false,
+      res.status(200).json({
+        msg: `Profile of a service with an id of ${id} is fetched successfully`,
+        status: true,
+        serviceProfile: data,
       });
     }
   } catch (error) {
     res.status(500).json({
-      msg: `An error occurred while fetching the profile of the services`,
+      msg: `An error occurred while fetching the profile with id ${id}`,
       status: false,
       error: error
     });
@@ -204,9 +206,9 @@ const deleteProfile = async (req, res) => {
 
 module.exports = {
   createProfile,
-  serviceProfile,
   getAllProfiles,
   getProfileByAccountId,
+  getProfileByServiceId,
   updateProfile,
   updateProfilePhoto,
   deleteProfile,

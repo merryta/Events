@@ -115,7 +115,8 @@ const getServicesBySubCategories = async (req, res) => {
         "services.support_team",
         "services.support_language",
         "services.service_duration",
-        "services.price"
+        "services.price",
+        "services.account_id",
       )
       .where({ service_sub_categories_id: id });
     res.status(200).json(data);
@@ -131,7 +132,6 @@ const getServicesByAccountId = async (req, res) => {
   try {
     const data = await knex("services")
       .join("accounts", "accounts.id", "services.account_id")
-      // .join("profile", "profile.account_id", "services.account_id")
       .select(
         "services.id",
         "services.name",
@@ -145,10 +145,8 @@ const getServicesByAccountId = async (req, res) => {
         "services.service_duration",
         "services.price",
         "services.account_id",
-        "profile.email",
       )
       .where({ account_id: id });
-      console.log('data', data);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: `Account with an id of ${id} is not found` });
