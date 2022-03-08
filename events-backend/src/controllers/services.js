@@ -159,10 +159,17 @@ const deleteService = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await knex("services").where({ id: id }).del();
-    res.status(204).json({
-      message: `Successfully delete service with an id of ${id}`,
-      status: true,
-    });
+    if(data) {
+      res.status(200).json({
+        message: `Successfully delete service with an id of ${id}`,
+        status: true,
+      });
+    } else {
+      res.status(404).json({
+        message: `Service with an id of ${id} is not found`,
+        status: false,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       message: `Service with an id of ${id} is not found`,

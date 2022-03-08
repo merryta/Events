@@ -1,34 +1,46 @@
 const knex = require('../../db/knex');
+const { IPinfoWrapper, LruCache } = require("node-ipinfo");
 
-const createProfile = (req, res) => {
-  knex("profile").insert({
-    phone: req.body.phone,
-    location: req.body.location,
-    website: req.body.website,
-    facebook: req.body.facebook,
-    twitter: req.body.twitter,
-    instagram: req.body.instagram,
-    linkedIn: req.body.linkedIn,
-    about: req.body.about,
-    photo: req.file.path,
-    account_id: req.body.account_id,
-  })
-  .returning("*")
-  .then((data) => {
-    res.status(200).json({
-      msg: "Profile created successfully",
-      status: true,
-      profile: data,
-    });
-  })
-  .catch((err) => {
-    res.status(500).json({
-      msg: "An error occurred while creating the profile",
-      status: false,
-      error: err.detail
-    });
-  })
-};
+const token = process.env.TOKEN;
+
+const cache = new LruCache({ max: 5000, maxAge: 1000 * 60 * 60 * 24 });
+const ipInfo =  new IPinfoWrapper( token, cache );
+
+const createProfile = async (req, res) => {
+  const info = await ipInfo.lookupIp("");
+  try {
+    const data = await knex("profile").insert({
+      phone: req.body.phone,
+      location: info.city,
+      website: req.body.website,
+      facebook: req.body.facebook,
+      twitter: req.body.twitter,
+      instagram: req.body.instagram,
+      linkedIn: req.body.linkedIn,
+      about: req.body.about,
+      photo: req.file.path,
+      account_id: req.body.account_id,
+      region: info.region,
+      country: info.country,
+      timezone: info.timezone,
+    })
+    .returning("*");
+    if (data) {
+      res.status(200).json({
+        msg: "Profile created successfully",
+        status: true,
+        profile: data,
+      });
+    } else {
+      res.status(500).json({
+        msg: "An error occurred while creating the profile",
+        status: false,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const getAllProfiles = async (req, res) => {
   try {
@@ -75,7 +87,6 @@ const getProfileByAccountId = async (req, res) => {
 
       )
       .where({ "profile.account_id" : id });
-      console.log(data);
       if(data.length === 0) {
         res.status(404).json({
           msg: `Profile with an id of ${id} is not found`,
@@ -107,32 +118,67 @@ const getProfileByServiceId = async (req, res) => {
         "profile.phone",
         "services.account_id",
         "services.name",
+        "services.id",
         "accounts.name as account_name",
         "accounts.email as account_email",
       )
       .where({ "services.id" : id })
-      .first()
-    if(data.length === 0) {
-      res.status(404).json({
-        msg: `Profile of a service with an id of ${id} is not found`,
-        status: false,
-        serviceProfile: [],
-      });
-    } else {
-      res.status(200).json({
-        msg: `Profile of a service with an id of ${id} is fetched successfully`,
-        status: true,
-        serviceProfile: data,
-      });
-    }
+      .first();
+      if(data) {
+        res.status(200).json({
+          msg: "Profile fetched successfully",
+          status: true,
+          serviceProfile: data,
+        });
+      } else {
+        res.status(404).json({
+          msg: `Profile of a service with an id of ${id} is not found`,
+          status: false,
+          serviceProfile: [],
+        });
+      }
   } catch (error) {
     res.status(500).json({
-      msg: `An error occurred while fetching the profile with id ${id}`,
+      msg: `An error occurred while fetching the profile of a service with an id ${id}`,
       status: false,
       error: error
     });
   }
 };
+
+const getProfileByServices = async (req, res) => {
+  try {
+    const data = await knex("profile")
+      .join("services", "services.account_id", "profile.account_id")
+      .join("accounts", "accounts.id", "profile.account_id")
+      .select(
+        "profile.phone",
+        "services.account_id",
+        "services.name",
+        "accounts.name as account_name",
+        "accounts.email as account_email",
+      );
+      if(data) {
+        res.status(200).json({
+          msg: "Profiles fetched successfully",
+          status: true,
+          profiles: data,
+        });
+      } else {
+        res.status(404).json({
+          msg: "No profiles found",
+          status: false,
+          profiles: [],
+        });
+      }
+  } catch (error) {
+    res.status(500).json({
+      msg: "An error occurred while fetching the data",
+      status: false,
+      error: error
+    });
+  }
+}
 
 const updateProfile = async (req, res) => {
   const { id } = req.params;
@@ -209,6 +255,7 @@ module.exports = {
   getAllProfiles,
   getProfileByAccountId,
   getProfileByServiceId,
+  getProfileByServices,
   updateProfile,
   updateProfilePhoto,
   deleteProfile,
